@@ -1,76 +1,98 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Timer">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".Activities.Timer"
+    tools:layout_editor_absoluteX="8dp"
+    tools:layout_editor_absoluteY="8dp">
+
 
     <ImageButton
         android:id="@+id/back"
         android:layout_width="164dp"
         android:layout_height="92dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/timer" />
 
-
-
-    <EditText
-        android:id="@+id/setTime"
-        android:layout_width="138dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/timerText"
-        android:layout_marginLeft="80dp"
-        android:layout_marginBottom="3dp"
-        android:background="@drawable/etgreen"
-        android:hint="Minutes"
-        android:inputType="number"
-        android:maxLength="4" />
-
-    <Button
-        android:id="@+id/set"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/setTime"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="-2dp"
-        android:layout_toEndOf="@+id/setTime"
-        android:background="@drawable/btnblue"
-        android:text="Set" />
-
     <TextView
-        android:id="@+id/timerText"
+        android:id="@+id/estimated"
+        android:layout_marginTop="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="80dp"
-        android:text="00:00"
-        android:textColor="@android:color/black"
+        android:textSize="30dp"
+        android:layout_gravity="center_horizontal"
+        android:text="EST TIME"/>
+
+    <Chronometer
+        android:id="@+id/chronometerExample"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
         android:textSize="60sp" />
 
-    <Button
-        android:id="@+id/startPause"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timerText"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/btngreen"
-        android:text="start" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true">
 
-    <Button
-        android:id="@+id/resetTimer"
-        android:background="@drawable/btnred"
-        android:layout_width="300dp"
-        android:layout_marginTop="20dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/startPause"
-        android:layout_marginStart="11dp"
-        android:layout_centerHorizontal="true"
-        android:text="reset"
-        android:visibility="invisible"
-        tools:visibility="visible" />
+        <Button
+            android:id="@+id/buttonStartChronometer"
+            android:layout_marginStart="55dp"
+            android:layout_width="300dp"
+            android:layout_marginTop="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="startChronometer"
+            android:background="@drawable/btnblue"
+            android:text="Start"
+            android:textAllCaps="false" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/buttonStopChronometer"
+            android:layout_marginStart="55dp"
+            android:layout_width="300dp"
+           android:background="@drawable/btnred"
+            android:layout_height="match_parent"
+            android:layout_gravity="fill_vertical"
+            android:layout_weight="1"
+            android:onClick="stopChronometer"
+            android:layout_marginTop="15dp"
+            android:text="Stop"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/buttonRestartChronometer"
+            android:layout_marginStart="55dp"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="fill_vertical"
+            android:layout_weight="1"
+            android:layout_marginTop="15dp"
+            android:onClick="resetChronometer"
+            android:background="@drawable/btnblack"
+            android:text="Reset"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/finish"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="15dp"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="fill_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/btngreen"
+            android:text="Completed"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+
+
+</LinearLayout>

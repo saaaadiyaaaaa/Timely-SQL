@@ -5,7 +5,6 @@
     android:id="@+id/ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:background="#F0EDED"
     android:orientation="vertical"
     android:padding="10dp"

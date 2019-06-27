@@ -31,8 +31,6 @@ import java.util.Date;
 
 public class EditTask extends AppCompatActivity {
 
-    private static final String[] Priority = {"Priority", "High", "Medium", "Low"};
-    private static final String[] Period = {"Preferred time", "Morning", "Afternoon", "Evening", "Night"};
     Integer priority =  0,  prefTime = 0;
     Date startD, endD;
     Button btnSave, btnCancel;
@@ -75,13 +73,13 @@ public class EditTask extends AppCompatActivity {
         estDuration.setText( getIntent().getStringExtra( "est" ) );
         desc.setText( getIntent().getStringExtra( "desc" ) );
 
-        if (getIntent().getStringExtra( "prefTime" ).equals( "Morning" )){
+        if (getIntent().getStringExtra( "prefTime" ).equalsIgnoreCase( "Morning" )){
             morn.setSelected( true );
-        } else  if (getIntent().getStringExtra( "prefTime" ).equals( "Evening" )){
+        } else  if (getIntent().getStringExtra( "prefTime" ).equalsIgnoreCase( "Evening" )){
             even.setSelected( true );
-        } else  if (getIntent().getStringExtra( "prefTime" ).equals( "Afternoon" )){
+        } else  if (getIntent().getStringExtra( "prefTime" ).equalsIgnoreCase( "Afternoon" )){
             after.setSelected( true );
-        } else  if (getIntent().getStringExtra( "prefTime" ).equals( "Noght" )){
+        } else  if (getIntent().getStringExtra( "prefTime" ).equalsIgnoreCase( "Noght" )){
             night.setSelected( true );
         }
 

@@ -5,18 +5,18 @@ import android.content.Intent;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.sqltodo.Activities.ViewTask;
+import com.example.sqltodo.DatabaseHelper;
 import com.example.sqltodo.JSON.Task;
 import com.example.sqltodo.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.taskViewHolder> {
 
@@ -27,7 +27,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.taskViewHolder
         this.context = context;
         this.listTasks = listTasks;
     }
-    
 
     @Override
     public taskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -38,6 +37,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.taskViewHolder
 
     @Override
     public void onBindViewHolder(taskViewHolder holder, final int position) {
+
+
+
         holder.taskName.setText( listTasks.get( position ).getName() );
         holder.taskDate.setText( listTasks.get( position ).getEndDate() );
         holder.desc.setText( listTasks.get( position ).getDesc() );
@@ -57,12 +59,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.taskViewHolder
         return listTasks.size();
     }
 
-    public class taskViewHolder extends RecyclerView.ViewHolder {
+    public class taskViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         public TextView taskName;
         public TextView taskDate;
         public TextView desc;
         CardView cardView;
+
 
         public taskViewHolder(View view) {
             super( view );
@@ -70,11 +73,31 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.taskViewHolder
             taskDate = view.findViewById( R.id.itemDate );
             desc = view.findViewById( R.id.itemDesc );
             cardView = view.findViewById( R.id.cardView );
+            cardView.setOnCreateContextMenuListener( this );
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+            menu.add( this.getAdapterPosition(), 1, 0, "Delete Task" );
+            menu.add( this.getAdapterPosition(), 2, 0, "Mark as complete" );
 
         }
     }
 
+    public void removeItem(int position){
+        DatabaseHelper databaseHelper = new DatabaseHelper( this.context );
+        databaseHelper.deleteTask( listTasks.get( position ).getName() );
+        listTasks.remove( position );
+        notifyDataSetChanged();
+    }
 
+    public void markComplete(int position){
+        DatabaseHelper databaseHelper = new DatabaseHelper( this.context );
+        databaseHelper.marksAsCompleted( listTasks.get( position ).getName() );
+        listTasks.remove( position );
+        notifyDataSetChanged();
+    }
 
 }
 

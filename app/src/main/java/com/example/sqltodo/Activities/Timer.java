@@ -1,216 +1,137 @@
 package com.example.sqltodo.Activities;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sqltodo.Dashboard;
+import com.example.sqltodo.DatabaseHelper;
 import com.example.sqltodo.R;
 
-import java.util.Locale;
+import static com.example.sqltodo.App.CHANNEL_1_ID;
 
 public class Timer extends AppCompatActivity {
 
-    private EditText setTime;
-    private TextView timerText;
-    private Button setTimer;
-    private Button pauseStart;
-    private Button resetTimer;
-
-    private CountDownTimer timer;
-
-    private boolean timerRunning;
-
-    private long startTime;
-    private long timeLeft;
-    private long endTime;
-
-    ImageButton back;
+    private boolean running;
+    Chronometer chronometer;
+    Button buttonStart;
+    Button buttonStop;
+    Button buttonRestart;
+    Button finish;
+    TextView estimated;
+    private long pauseOffset;
+    Notification notification;
+    DatabaseHelper helper;
+    long est;
+    private NotificationManagerCompat notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_timer );
 
-        setTime = findViewById( R.id.setTime );
-        timerText = findViewById( R.id.timerText );
-        back = findViewById( R.id.back );
-        setTimer = findViewById( R.id.set );
-        pauseStart = findViewById( R.id.startPause );
-        resetTimer = findViewById( R.id.resetTimer );
+        notificationManager = NotificationManagerCompat.from(this);
+        estimated = findViewById( R.id.estimated );
+        buttonStart = findViewById( R.id.buttonStartChronometer );
+        buttonStop = findViewById( R.id.buttonStopChronometer );
+        buttonRestart = findViewById( R.id.buttonRestartChronometer );
+        finish = findViewById( R.id.finish );
+        chronometer = findViewById( R.id.chronometerExample );
 
+        chronometer.setBase(SystemClock.elapsedRealtime());
 
-        String input = getIntent().getStringExtra( "est" );
-        long millisInput = Long.parseLong( input ) * 60000;
-        setTime( millisInput );
+        estimated.setText( "Estimated Time: " + getIntent().getStringExtra( "est" ) + " minutes");
 
-        pauseStart.setOnClickListener( new View.OnClickListener() {
+        est = Long.parseLong( getIntent().getStringExtra( "est" ) ) * 60000;
+
+        Toast.makeText( getApplicationContext(), Long.toString( est ) , Toast.LENGTH_SHORT ).show();
+
+        chronometer.setOnChronometerTickListener( new Chronometer.OnChronometerTickListener() {
             @Override
-            public void onClick(View v) {
-                if (timerRunning) {
-                    pauseTimer();
-                } else {
-                    startTimer();
+            public void onChronometerTick(Chronometer chronometer) {
+                if ((SystemClock.elapsedRealtime() - chronometer.getBase()) == est) {
+                    sendOnChannel1();
                 }
             }
         } );
 
-        resetTimer.setOnClickListener( new View.OnClickListener() {
+        finish.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetTimer();
+                helper.marksAsCompleted( getIntent().getStringExtra( "name" ) );
             }
         } );
 
-        back.setOnClickListener( new View.OnClickListener() {
+        buttonStart.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity( new Intent( getApplicationContext(), TaskCard.class ) );
+                startChronometer();
+            }
+        } );
+
+        buttonStop.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopChronometer();
+            }
+        } );
+
+        buttonRestart.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetChronometer();
             }
         } );
     }
 
-    private void setTime(long milliseconds) {
-        startTime = milliseconds;
-        resetTimer();
-        closeKeyboard();
-    }
-
-    private void startTimer() {
-        endTime = System.currentTimeMillis() + timeLeft;
-
-        timer = new CountDownTimer( timeLeft, 1000 ) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timeLeft = millisUntilFinished;
-                updateCountDownText();
-            }
-
-            @Override
-            public void onFinish() {
-                timerRunning = false;
-                updateWatchInterface();
-            }
-        }.start();
-
-        timerRunning = true;
-        updateWatchInterface();
-    }
-
-    private void pauseTimer() {
-        timer.cancel();
-        timerRunning = false;
-        updateWatchInterface();
-    }
-
-    private void resetTimer() {
-        timeLeft = startTime;
-        updateCountDownText();
-        updateWatchInterface();
-    }
-
-    private void updateCountDownText() {
-        int hours = (int) (timeLeft / 1000) / 3600;
-        int minutes = (int) ((timeLeft / 1000) % 3600) / 60;
-        int seconds = (int) (timeLeft / 1000) % 60;
-
-        String timeLeftFormatted;
-        if (hours > 0) {
-            timeLeftFormatted = String.format( Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds );
-        } else {
-            timeLeftFormatted = String.format( Locale.getDefault(), "%02d:%02d", minutes, seconds );
-        }
-
-        timerText.setText( timeLeftFormatted );
-    }
-
-    private void updateWatchInterface() {
-        if (timerRunning) {
-            setTime.setVisibility( View.INVISIBLE );
-            setTimer.setVisibility( View.INVISIBLE );
-            resetTimer.setVisibility( View.INVISIBLE );
-            pauseStart.setText( "Pause" );
-        } else {
-            setTime.setVisibility( View.VISIBLE );
-            setTimer.setVisibility( View.VISIBLE );
-            pauseStart.setText( "Start" );
-
-            if (timeLeft < 1000) {
-                pauseStart.setVisibility( View.INVISIBLE );
-            } else {
-                pauseStart.setVisibility( View.VISIBLE );
-            }
-
-            if (timeLeft < startTime) {
-                resetTimer.setVisibility( View.VISIBLE );
-            } else {
-                resetTimer.setVisibility( View.INVISIBLE );
-            }
+    public void startChronometer(){
+        if (!running) {
+            chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+            chronometer.start();
+            running = true;
         }
     }
 
-    private void closeKeyboard() {
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService( INPUT_METHOD_SERVICE );
-            imm.hideSoftInputFromWindow( view.getWindowToken(), 0 );
+    public void stopChronometer(){
+        if (running) {
+            chronometer.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
+            running = false;
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        SharedPreferences prefs = getSharedPreferences( "prefs", MODE_PRIVATE );
-        SharedPreferences.Editor editor = prefs.edit();
-
-        editor.putLong( "startTimeInMillis", startTime );
-        editor.putLong( "millisLeft", timeLeft );
-        editor.putBoolean( "timerRunning", timerRunning );
-        editor.putLong( "endTime", endTime );
-
-        editor.apply();
-
-        if (timer != null) {
-            timer.cancel();
-        }
+    public void resetChronometer(){
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        pauseOffset = 0;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    public void sendOnChannel1() {
+        Intent resultIntent = new Intent( this, Timer.class );
+        PendingIntent resultPendingIntent = PendingIntent.getActivity( this, 1, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT );
+        String title = "Time's up!";
+        String message = "You've reached the estimated time for the task.";
 
-        SharedPreferences prefs = getSharedPreferences( "prefs", MODE_PRIVATE );
+        notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.timely_final)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority( NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setAutoCancel( true )
+                .setContentIntent( resultPendingIntent )
+                .build();
 
-        startTime = prefs.getLong( "startTimeInMillis", 600000 );
-        timeLeft = prefs.getLong( "millisLeft", startTime );
-        timerRunning = prefs.getBoolean( "timerRunning", false );
-
-        updateCountDownText();
-        updateWatchInterface();
-
-        if (timerRunning) {
-            endTime = prefs.getLong( "endTime", 0 );
-            timeLeft = endTime - System.currentTimeMillis();
-
-            if (timeLeft < 0) {
-                timeLeft = 0;
-                timerRunning = false;
-                updateCountDownText();
-                updateWatchInterface();
-            } else {
-                startTimer();
-            }
-        }
+        notificationManager.notify( 1, notification );
     }
 
     @Override
@@ -218,4 +139,7 @@ public class Timer extends AppCompatActivity {
         startActivity( new Intent( getApplicationContext(), Dashboard.class ) );
     }
 }
+
+
+
 

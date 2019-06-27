@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#F0EDED"
     tools:context=".Profile">
 
 
@@ -24,6 +24,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="20dp"
         android:text="Name"
+        android:layout_marginTop="30dp"
         android:layout_below="@id/imageView8"/>
     <EditText
         android:id="@+id/name"
@@ -49,6 +50,8 @@
         android:layout_width="67dp"
         android:layout_height="83dp"
         android:layout_alignRight="@id/imageView8"
+
+        android:layout_marginRight="-260dp"
         android:src="@drawable/timely_final" />
 
     <TextView
@@ -65,12 +68,22 @@
 
     <Button
         android:id="@+id/updateDetails"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:background="@drawable/btnblack"
         android:layout_below="@id/email"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="320dp"
         android:layout_centerHorizontal="true"
         android:text="UPDATE" />
+
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btnred"
+        android:layout_below="@id/updateDetails"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="LOGOUT" />
 
 </RelativeLayout>

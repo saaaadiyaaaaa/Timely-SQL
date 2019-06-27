@@ -19,7 +19,7 @@ import java.util.List;
 public class ViewTask extends AppCompatActivity {
 
     TextView name, start, end, pr, time, desc, est;
-    Button btnupdate, btnstart;
+    Button btnupdate, btnstart, btncomplete;
     ImageView back;
     DatabaseHelper helper;
 
@@ -28,6 +28,7 @@ public class ViewTask extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_view_task );
 
+        btncomplete = findViewById( R.id.complete );
         btnupdate = findViewById( R.id.btnupdate );
         btnstart = findViewById( R.id.btnstart );
         name = findViewById( R.id.name );
@@ -42,7 +43,7 @@ public class ViewTask extends AppCompatActivity {
 
         String tname = getIntent().getStringExtra( "name" );
 
-        Task task = helper.viewTask( tname );
+        final Task task = helper.viewTask( tname );
 
         name.setText( task.getName() );
         start.setText( task.getStartDate() );
@@ -59,16 +60,18 @@ public class ViewTask extends AppCompatActivity {
 
         est.setText( task.getEstDuration().toString() );
 
-        switch (task.getPrefTime().toString()){
-            case "1": time.setText( "Morning" );
-                break;
-            case "2": time.setText( "Afternoon" );
-                break;
-            case "3": time.setText( "Evening" );
-                break;
-            case "4": time.setText( "Night" );
-                break;
+        String tp = task.getPrefTime().toString();
+        String period = "";
+        if (tp.equalsIgnoreCase( "1" )){
+            period = "Morning";
+        } else if (tp.equalsIgnoreCase( "2" )){
+            period = "Afternoon";
+        } else if (tp.equalsIgnoreCase( "3" )){
+            period = "Evening";
+        }  else if (tp.equalsIgnoreCase( "4" )) {
+            period = "Night";
         }
+        time.setText( period );
 
         desc.setText( task.getDesc() );
 
@@ -91,6 +94,7 @@ public class ViewTask extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent( getApplicationContext(), Timer.class );
                 intent.putExtra( "est", est.getText().toString() );
+                intent.putExtra( "name", name.getText().toString() );
                 startActivity( intent );
             }
         } );
@@ -100,6 +104,13 @@ public class ViewTask extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent( getApplicationContext(), Dashboard.class );
                 startActivity( intent );
+            }
+        } );
+
+        btncomplete.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helper.marksAsCompleted( task.getName() );
             }
         } );
 

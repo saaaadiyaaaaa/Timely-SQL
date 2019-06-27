@@ -322,10 +322,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_TASK, values, COL_1_TID + " = ?", new String[]{String.valueOf(task.getTaskid())});
     }
 
-    public void deleteTask(Task task) {
+    public void deleteTask(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_TASK, COL_1_TID + " = ?",
-                new String[]{String.valueOf(task.getTaskid())});
+        db.delete(TABLE_TASK, COL_2_TNAME + " = ?",
+                new String[]{String.valueOf(name)});
+    }
+
+    public void marksAsCompleted(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_9_STATUS, "completed");
+        db.update(TABLE_TASK, values, COL_2_TNAME + " = ?", new String[]{String.valueOf(name)});
     }
 }
 
