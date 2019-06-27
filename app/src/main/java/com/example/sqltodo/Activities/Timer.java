@@ -68,7 +68,10 @@ public class Timer extends AppCompatActivity {
         finish.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.marksAsCompleted( getIntent().getStringExtra( "name" ) );
+                stopChronometer();
+                String taskname = getIntent().getStringExtra( "name" );
+                helper.marksAsCompleted( taskname );
+                helper.setActual( taskname, getTime() );
             }
         } );
 
@@ -132,6 +135,40 @@ public class Timer extends AppCompatActivity {
                 .build();
 
         notificationManager.notify( 1, notification );
+    }
+
+    public Integer getTime(){
+        String chronoText = chronometer.getText().toString();
+        String array[] = chronoText.split(":");
+        Integer stoppedMilliseconds = 0;
+
+        if(array.length < 2 || array.length > 3)
+            return 0;
+
+        int seconds = 0, minutes = 0, hours = 0;
+
+        if(array.length == 2){
+
+            if (Integer.parseInt(array[1]) > 30){
+                minutes = Integer.parseInt(array[0]) + 1;
+            } else {
+                minutes = Integer.parseInt(array[0]);
+            }
+
+        }
+
+        if(array.length == 3){
+            if (Integer.parseInt(array[2]) > 30){
+                minutes = Integer.parseInt(array[0]) + 1;
+            } else {
+                minutes = Integer.parseInt(array[0]);
+            }
+
+            hours = Integer.parseInt( array[0] ) * 60;
+
+        }
+
+        return (minutes + hours);
     }
 
     @Override

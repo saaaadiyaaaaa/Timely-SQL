@@ -32,13 +32,14 @@ public class TaskCard extends AppCompatActivity implements NavigationView.OnNavi
     private TaskAdapter taskAdapter;
     private DatabaseHelper databaseHelper;
     private RecyclerView taskList;
-
+    Button completed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_task_card );
 
+        completed = findViewById( R.id.completedTasks );
         listTasks = new ArrayList<Task>();
         taskList = findViewById( R.id.taskList );
         taskList.setLayoutManager( new LinearLayoutManager( this ) );
@@ -63,6 +64,13 @@ public class TaskCard extends AppCompatActivity implements NavigationView.OnNavi
                 startActivity( new Intent( getApplicationContext(), AddTask.class ) );
             }
         } );
+
+        completed.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity( new Intent( getApplicationContext(), Completed.class ) );
+            }
+        } );
     }
 
     private void getDataFromSQLite() {
@@ -72,6 +80,7 @@ public class TaskCard extends AppCompatActivity implements NavigationView.OnNavi
                 listTasks.clear();
                 try {
                     listTasks.addAll( databaseHelper.getAllOnGoingTasks() );
+                    taskAdapter.setEnabled();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

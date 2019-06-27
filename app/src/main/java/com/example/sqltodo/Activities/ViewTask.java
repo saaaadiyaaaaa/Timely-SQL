@@ -28,7 +28,6 @@ public class ViewTask extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_view_task );
 
-        btncomplete = findViewById( R.id.complete );
         btnupdate = findViewById( R.id.btnupdate );
         btnstart = findViewById( R.id.btnstart );
         name = findViewById( R.id.name );
@@ -104,13 +103,6 @@ public class ViewTask extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent( getApplicationContext(), Dashboard.class );
                 startActivity( intent );
-            }
-        } );
-
-        btncomplete.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                helper.marksAsCompleted( task.getName() );
             }
         } );
 

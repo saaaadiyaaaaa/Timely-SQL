@@ -13,19 +13,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Welcome to timely!"
             android:textSize="30dp"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:textStyle="bold"
             />
 
         <ImageView
             android:layout_width="55dp"
             android:layout_height="66dp"
-            android:layout_marginStart="60dp"
+            android:layout_marginStart="65dp"
             android:src="@drawable/timely_final" />
 
     </LinearLayout>
@@ -36,7 +37,7 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:gravity="center"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
         <android.support.v7.widget.CardView
@@ -92,6 +93,7 @@
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:background="@drawable/cercleshape"
+                    android:src="@drawable/checklist"
                     android:padding="10dp" />
 
                 <TextView
@@ -134,7 +136,8 @@
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:background="@drawable/cercleshape"
+                    android:background="@drawable/cercleblue"
+                    android:src="@drawable/star"
                     android:padding="10dp" />
 
                 <TextView
@@ -186,7 +189,9 @@
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:background="@drawable/cercleshape"
+                    android:src="@drawable/diagram"
+                    android:background="@drawable/cercleblue"
+                    android:scaleType="fitCenter"
                     android:padding="10dp" />
 
                 <TextView
@@ -230,6 +235,7 @@
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:background="@drawable/cercleshape"
+                    android:src="@drawable/user"
                     android:padding="10dp" />
 
                 <TextView

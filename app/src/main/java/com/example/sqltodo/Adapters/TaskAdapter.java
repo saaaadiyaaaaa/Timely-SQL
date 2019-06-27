@@ -23,6 +23,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.taskViewHolder
     Context context;
     ArrayList<Task> listTasks;
 
+
     public TaskAdapter(Context context, ArrayList<Task> listTasks) {
         this.context = context;
         this.listTasks = listTasks;
@@ -37,8 +38,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.taskViewHolder
 
     @Override
     public void onBindViewHolder(taskViewHolder holder, final int position) {
-
-
 
         holder.taskName.setText( listTasks.get( position ).getName() );
         holder.taskDate.setText( listTasks.get( position ).getEndDate() );
@@ -64,7 +63,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.taskViewHolder
         public TextView taskName;
         public TextView taskDate;
         public TextView desc;
-        CardView cardView;
+        public CardView cardView;
 
 
         public taskViewHolder(View view) {
@@ -97,6 +96,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.taskViewHolder
         databaseHelper.marksAsCompleted( listTasks.get( position ).getName() );
         listTasks.remove( position );
         notifyDataSetChanged();
+    }
+
+    public void setEnabled(){
+
+    }
+
+
+    public void setDisabled(){
     }
 
 }

@@ -21,6 +21,16 @@
             android:text="YOUR TASKS"
             android:textSize="30dp"
             android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/completedTasks"
+            android:layout_marginStart="35dp"
+            android:layout_width="170dp"
+            android:layout_marginTop="5dp"
+            android:layout_height="40dp"
+            android:text="Completed Tasks"
+            android:background="@drawable/btnblue"/>
+
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

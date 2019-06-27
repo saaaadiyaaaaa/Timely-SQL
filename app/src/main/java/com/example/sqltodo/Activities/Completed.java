@@ -23,55 +23,41 @@ import com.example.sqltodo.DatabaseHelper;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-public class Completed extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Completed extends AppCompatActivity {
 
     private AppCompatActivity activity = Completed.this;
 
-    Button drawerBtn;
+
     private ArrayList<Task> listCompletedTasks;
     private TaskAdapter taskAdapter;
     private DatabaseHelper databaseHelper;
     private RecyclerView taskCompleted;
+    Button ongoing;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_task_card );
+        setContentView( R.layout.activity_completed );
 
-        final DrawerLayout drawer = findViewById( R.id.drawer_layout );
-        drawerBtn = findViewById( R.id.drawerBtn );
         listCompletedTasks = new ArrayList<Task>();
         taskCompleted = findViewById( R.id.taskCompleted );
         taskAdapter = new TaskAdapter(Completed.this, listCompletedTasks);
-
+        ongoing = findViewById( R.id.ongoing );
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         taskCompleted.setLayoutManager(mLayoutManager);
         taskCompleted.setItemAnimator(new DefaultItemAnimator());
         taskCompleted.setAdapter(taskAdapter);
         databaseHelper = new DatabaseHelper(activity);
 
-        drawerBtn.setOnClickListener( new View.OnClickListener() {
+        ongoing.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawer.openDrawer( GravityCompat.START );
+                startActivity( new Intent( getApplicationContext(), TaskCard.class ) );
             }
         } );
 
         getDataFromSQLite();
 
-    }
-
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.ongoing) {
-            startActivity( new Intent( getApplicationContext(), TaskCard.class ) );
-        } else if (id == R.id.completed) {
-            startActivity( new Intent( getApplicationContext(), Completed.class ) );
-        }
-
-        DrawerLayout drawer = findViewById( R.id.drawer_layout );
-        drawer.closeDrawer( GravityCompat.START );
-        return true;
     }
 
     private void getDataFromSQLite() {
@@ -81,6 +67,7 @@ public class Completed extends AppCompatActivity implements NavigationView.OnNav
                 listCompletedTasks.clear();
                 try {
                     listCompletedTasks.addAll(databaseHelper.getCompletedTasks());
+                    taskAdapter.setDisabled();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

@@ -284,26 +284,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_10_DESC
         };
 
+        String selection = COL_9_STATUS + "=?";
+
         List<Task> taskList = new ArrayList<Task>();
 
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_TASK, //Table to query
                 columns,    //columns to return
-                COL_9_STATUS,        //columns for the WHERE clause
+                selection,        //columns for the WHERE clause
                 new String[]{"completed"},        //The values for the WHERE clause
                 null,       //group the rows
                 null,       //filter by row groups
                 null); //The sort order
 
-        if (cursor.moveToFirst()) {
-            do {
-                Task task = new Task();
-                task.setName( cursor.getString( cursor.getColumnIndex( COL_2_TNAME ) ) );
-                task.setStartDate( COL_3_START);
-                taskList.add(task);
-            } while (cursor.moveToNext());
+        if (cursor != null){
+            if (cursor.moveToFirst()) {
+                do {
+                    Task task = new Task();
+                    task.setName( cursor.getString( cursor.getColumnIndex( COL_2_TNAME ) ) );
+                    task.setStartDate( cursor.getString( cursor.getColumnIndex( COL_3_START ) ));
+                    task.setStartDate( cursor.getString( cursor.getColumnIndex( COL_10_DESC ) ));
+                    taskList.add(task);
+                } while (cursor.moveToNext());
+            }
         }
+
         cursor.close();
         return taskList;
     }
@@ -332,6 +338,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_9_STATUS, "completed");
+        db.update(TABLE_TASK, values, COL_2_TNAME + " = ?", new String[]{String.valueOf(name)});
+    }
+
+    public void setActual(String name, Integer time){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_8_ACT, time);
         db.update(TABLE_TASK, values, COL_2_TNAME + " = ?", new String[]{String.valueOf(name)});
     }
 }

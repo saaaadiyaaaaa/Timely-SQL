@@ -111,22 +111,12 @@
             android:textAlignment="center" />
 
         <Button
-            android:id="@+id/complete"
-            android:layout_width="348dp"
-            android:layout_height="42dp"
-            android:layout_below="@id/desc"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/button"
-            android:text="MARK AS COMPLETED" />
-
-        <Button
             android:id="@+id/btnupdate"
             android:layout_width="348dp"
             android:layout_height="42dp"
             android:layout_below="@id/desc"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/btnblack"
             android:text="UPDATE" />
 
