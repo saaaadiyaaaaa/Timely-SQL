@@ -347,6 +347,80 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_8_ACT, time);
         db.update(TABLE_TASK, values, COL_2_TNAME + " = ?", new String[]{String.valueOf(name)});
     }
+
+    public Double reportTime(){
+
+        Double count = 0.0;
+
+        String query = "select * from task where status = 'completed' and actDuration IS NOT NULL;";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery( query, null );
+
+        Integer total = cursor.getCount();
+        Log.d( TAG, "report time " );
+        Log.d( TAG, "total tasks" + total.toString() );
+
+        if (cursor != null){
+            if (cursor.moveToFirst()) {
+                do {
+                    Integer est = cursor.getInt( cursor.getColumnIndex( COL_5_EST ));
+                    Integer act = cursor.getInt( cursor.getColumnIndex( COL_8_ACT ));
+                    if ( act <= est){
+                        count++;
+                    }
+
+                } while (cursor.moveToNext());
+            }
+        }
+
+        Log.d( TAG, "formaula: " + count + "/" + total + " * 100"  );
+        Double percentage = Double.valueOf( ( count * 100 / total ));
+        Log.d( TAG, "percentage" + percentage.toString() );
+        cursor.close();
+        return percentage;
+    }
+
+    public double reportTaskCompletion(){
+        String[] columns = {
+                COL_1_TID
+        };
+
+        String selection = COL_9_STATUS + "=?";
+
+        List<Task> taskList = new ArrayList<Task>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor totalCursor = db.query(TABLE_TASK, //Table to query
+                columns,    //columns to return
+                null,        //columns for the WHERE clause
+                null,        //The values for the WHERE clause
+                null,       //group the rows
+                null,       //filter by row groups
+                null); //The sort order
+
+        Cursor completedCursor = db.query(TABLE_TASK, //Table to query
+                columns,    //columns to return
+                selection,        //columns for the WHERE clause
+                new String[]{"completed"},        //The values for the WHERE clause
+                null,       //group the rows
+                null,       //filter by row groups
+                null); //The sort order
+
+        int total = totalCursor.getCount();
+        int completed = completedCursor.getCount();
+
+        double perc = Double.valueOf( ( completed * 100 / total ));
+        Log.d( TAG, "total" + total );
+        Log.d( TAG, "compl" + completed );
+        Log.d( TAG, "perc" + perc );
+
+        completedCursor.close();
+        totalCursor.close();
+        return perc;
+    }
 }
 
 

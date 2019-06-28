@@ -10,6 +10,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,16 +23,19 @@ public class MainActivity extends AppCompatActivity {
     String TempPassword = "NOT_FOUND";
     DatabaseHelper sqLiteHelper;
     Cursor cursor;
+    ProgressBar signinProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
+        signinProgress = findViewById( R.id.signInProgress );
         login = findViewById( R.id.buttonLogin );
         register = findViewById( R.id.buttonRegister );
         email = findViewById( R.id.editEmail );
         password = findViewById( R.id.editPassword );
+        signinProgress.setVisibility(View.GONE);
 
         sqLiteHelper = new DatabaseHelper( this );
 
@@ -54,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void LoginFunction() {
 
-
         String error = "false";
 
         if (email.getText().toString().isEmpty()) {
@@ -75,15 +78,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (error.equals( "false" )) {
+            signinProgress.setVisibility(View.VISIBLE);
             if (sqLiteHelper.checkUser( email.getText().toString().trim(), password.getText().toString().trim() )) {
                 SharedPreferences sharedPreferences = getSharedPreferences( "USER", MODE_PRIVATE );
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("email", email.getText().toString());
                 editor.apply();
+                signinProgress.setVisibility(View.GONE);
                 Intent intent = new Intent( getApplicationContext(), Dashboard.class );
                 startActivity( intent );
             }
         } else {
+            signinProgress.setVisibility(View.GONE);
             Toast.makeText( this, "Unable to login", Toast.LENGTH_SHORT ).show();
         }
     }

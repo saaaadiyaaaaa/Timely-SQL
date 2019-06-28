@@ -40,6 +40,7 @@ public class Timer extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_timer );
 
+        helper = new DatabaseHelper( this );
         notificationManager = NotificationManagerCompat.from(this);
         estimated = findViewById( R.id.estimated );
         buttonStart = findViewById( R.id.buttonStartChronometer );
@@ -54,12 +55,10 @@ public class Timer extends AppCompatActivity {
 
         est = Long.parseLong( getIntent().getStringExtra( "est" ) ) * 60000;
 
-        Toast.makeText( getApplicationContext(), Long.toString( est ) , Toast.LENGTH_SHORT ).show();
-
         chronometer.setOnChronometerTickListener( new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
-                if ((SystemClock.elapsedRealtime() - chronometer.getBase()) == est) {
+                if ((SystemClock.elapsedRealtime() - chronometer.getBase()) >= est) {
                     sendOnChannel1();
                 }
             }

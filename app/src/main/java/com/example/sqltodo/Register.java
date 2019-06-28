@@ -8,6 +8,7 @@ import android.view.View;
 import android.content.Intent;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,18 +21,21 @@ public class Register extends AppCompatActivity {
     Button register;
     TextView login;
     DatabaseHelper helper;
+    ProgressBar signupProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        signupProgress = findViewById( R.id.signUpProgress );
         login = findViewById( R.id.tvLogin );
         register = findViewById(R.id.Register);
         email = findViewById(R.id.reditEmail);
         confirm = findViewById( R.id.reditConfirm );
         password = findViewById(R.id.reditPassword);
         name= findViewById(R.id.reditName);
+        signupProgress.setVisibility(View.GONE);
 
         helper = new DatabaseHelper(this);
 
@@ -91,6 +95,7 @@ public class Register extends AppCompatActivity {
                 }
 
                 if (error.equals( "false" )) {
+                    signupProgress.setVisibility(View.VISIBLE);
                     User user = new User();
                     user.setName( name.getText().toString() );
                     user.setEmail( email.getText().toString() );
@@ -99,8 +104,15 @@ public class Register extends AppCompatActivity {
                     boolean added = helper.addUser( user );
                     if (added) {
                         Toast.makeText( getApplicationContext(), "User Registered.", Snackbar.LENGTH_LONG ).show();
+                        startActivity( new Intent( getApplicationContext(), MainActivity.class ) );
+                        name.setText( "" );
+                        email.setText( "" );
+                        password.setText( "" );
+                        confirm.setText( "" );
+                        signupProgress.setVisibility(View.GONE);
                     } else {
                         Toast.makeText( getApplicationContext(), "Unable to register.", Snackbar.LENGTH_LONG ).show();
+                        signupProgress.setVisibility(View.GONE);
                     }
 
                 }
