@@ -4,8 +4,9 @@
     <string name="title_activity_task_card">TaskCard</string>
     <string name="error_valid_email_password">Wrong Email or Password</string>
     <string name="title_activity_task_card1">TaskCard1</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Videos</string>
+    <string name="tab_text_2">Articles</string>
     <string name="event_default_title">My event</string>
+    <string name="title_activity_tips_tricks">TipsTricks</string>
 
 </resources>

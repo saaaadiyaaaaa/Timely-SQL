@@ -214,7 +214,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     Task task = new Task();
                     task.setName( cursor.getString( cursor.getColumnIndex( COL_2_TNAME ) ) );
                     task.setStartDate( cursor.getString( cursor.getColumnIndex( COL_3_START ) ));
-                    task.setStartDate( cursor.getString( cursor.getColumnIndex( COL_10_DESC ) ));
+                    task.setDesc( cursor.getString( cursor.getColumnIndex( COL_10_DESC ) ));
+                    task.setEndDate( cursor.getString( cursor.getColumnIndex( COL_4_END ) ) );
+                    task.setPriority( cursor.getInt( cursor.getColumnIndex( COL_7_PR ) ));
+                    task.setPrefTime( cursor.getInt( cursor.getColumnIndex( COL_6_PREF) ));
                     taskList.add(task);
                 } while (cursor.moveToNext());
             }

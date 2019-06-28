@@ -50,7 +50,7 @@ public class ReportCard extends AppCompatActivity {
         tips.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity( new Intent( getApplicationContext(), TipsTrick.class ) );
+                startActivity( new Intent( getApplicationContext(), TipsTricks.class ) );
             }
         } );
     }

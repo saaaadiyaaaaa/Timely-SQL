@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sqltodo.Adapters.TaskAdapter;
 import com.example.sqltodo.Dashboard;
 import com.example.sqltodo.JSON.Task;
 import com.example.sqltodo.R;
@@ -43,6 +44,7 @@ public class AddTask extends AppCompatActivity {
     RadioButton prRadio, prefRadio;
     RadioGroup priorityRadio, prefRadioGroup;
     DatabaseHelper taskHelper;
+    TaskAdapter taskAdapter;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override

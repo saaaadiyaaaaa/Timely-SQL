@@ -47,12 +47,11 @@ public class TaskCard extends AppCompatActivity implements NavigationView.OnNavi
         FloatingActionButton fab = findViewById( R.id.fab );
         taskList = findViewById( R.id.taskList );
         listTasks = new ArrayList<Task>();
-        taskAdapter = new TaskAdapter( TaskCard.this, listTasks );
+
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager( getApplicationContext() );
         taskList.setLayoutManager( mLayoutManager );
         taskList.setItemAnimator( new DefaultItemAnimator() );
-        taskList.setAdapter( taskAdapter );
         databaseHelper = new DatabaseHelper( activity );
 
 
@@ -80,7 +79,8 @@ public class TaskCard extends AppCompatActivity implements NavigationView.OnNavi
                 listTasks.clear();
                 try {
                     listTasks.addAll( databaseHelper.getAllOnGoingTasks() );
-                    taskAdapter.setEnabled();
+                    taskAdapter = new TaskAdapter( TaskCard.this, listTasks );
+                    taskList.setAdapter( taskAdapter );
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
